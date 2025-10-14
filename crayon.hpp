@@ -3,30 +3,28 @@
 
 #include <string>
 
+using std::string;
+
+struct Node;
+
 class Crayon
 {
 private:
     std::string color;
 
 public:
-    // default constructor
-    Crayon() : color("") {}
+    Crayon::Crayon() : color("") {}
 
-    // parameterized constructor
-    Crayon(const std::string &color)
-        : color(color) {}
+    Crayon(const string& c) : color(c) {}
 
-    // Overload equality operator
-    bool operator==(const Crayon &other) const;
+    string getColor() const { return color; }
 
-    // Overload less-than operator
-    bool operator<(const Crayon &other) const;
+    // Overloading comparison operators for Crayon
+    bool operator<(const Crayon& other) const ;
 
-    // overload greater-than operator
-    bool operator>(const Crayon &other) const;
+    bool operator>(const Crayon& other) const ;
 
-    // Getters
-    std::string getColor() const;
+    bool operator==(const Crayon& other) const ;
 };
 
 #endif // CRAYON_HPP

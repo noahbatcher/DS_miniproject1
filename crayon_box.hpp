@@ -1,29 +1,30 @@
 #ifndef CRAYON_BOX_HPP
 #define CRAYON_BOX_HPP
 
+#define MAX_CRAYONS 20
+
 #include <string>
 #include "crayon.hpp"
+
 
 // CrayonBox class representing a linked list of crayons
 class CrayonBox
 {
 private:
-    Crayon *head;
     int size;
+    Crayon *box[MAX_CRAYONS];
 
 public:
     CrayonBox();
     ~CrayonBox();
 
-    void addCrayon(const std::string &color);
-    bool removeCrayon(const std::string &color);
+    void addCrayon(Crayon &newCrayon);
+    bool removeCrayon(Crayon &oldCrayon);
     bool isEmpty() const;
     bool isFull() const;
     void makeEmpty();
 
-    // Disable copy constructor and assignment
-    CrayonBox(const CrayonBox &) = delete;
-    CrayonBox &operator=(const CrayonBox &) = delete;
+    int getSize() const { return size; }
 };
 
 #endif // CRAYON_BOX_HPP

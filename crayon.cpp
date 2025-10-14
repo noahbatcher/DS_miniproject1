@@ -1,53 +1,44 @@
 #include <string>
 #include "crayon.hpp"
 
-class Crayon
-{
-private:
-    std::string color;
+// Implementations for Crayon declared in crayon.hpp
+Crayon::Crayon() : color("") {}
 
-public:
-    // Constructors
-    Crayon();
-    Crayon(const std::string &c);
+Crayon::Crayon(const std::string &c) : color(c) {}
 
-    // Gets
-    std::string getColor() const;
+std::string Crayon::getColor() const { 
+    return color; 
+}
 
-    // Operator overloads
-    bool operator==(const Crayon &other)
-    {
-        if (this->color[0] == other.color[0])
-        {
+bool Crayon::operator==(const Crayon &other) const { 
+    return color == other.color; 
+}
+
+bool Crayon::operator<(const Crayon &other) const { 
+
+    for (int i = 0; i < color.length() && i < other.color.length(); ++i) {
+        if (tolower(color[i]) < tolower(other.color[i])) {
             return true;
-        }
-        else
-        {
-            return false;
+        }else if (color[i] == other.color[i]) {
+            continue;
+        }else{
+            break;
         }
     }
 
-    bool operator<(const Crayon &other)
-    {
-        if (this->color[0] < other.color[0])
-        {
+    return false;
+}
+
+bool Crayon::operator>(const Crayon &other) const { 
+    for (int i = 0; i < color.length() && i < other.color.length(); ++i) {
+        if (tolower(color[i]) > tolower(other.color[i])) {
             return true;
-        }
-        else
-        {
-            return false;
+        }else if (color[i] == other.color[i]) {
+            continue;
+        }else{ //color[i] < other.color[i]
+            break;
         }
     }
 
-    bool operator>(const Crayon &other)
-    {
-        if (this->color[0] > other.color[0])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-};
+    return false;
+}
