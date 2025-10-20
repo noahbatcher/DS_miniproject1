@@ -4,13 +4,15 @@
 #include <string>
 #include <exception>
 
-class ErrorT : public std::exception {
+class ErrorT : public std::exception
+{
 
 private:
     std::string message;
+
 public:
-    ErrorT(const std::string& msg);        // constructor
-    const char* ErrorDesc() const; 
+    ErrorT(const std::string &msg); // constructor
+    const char *ErrorDesc() const;
 };
 
 #endif // ERRORT_HPP

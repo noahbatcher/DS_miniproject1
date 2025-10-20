@@ -1,44 +1,40 @@
-#include <string>
 #include "crayon.hpp"
+#include <cctype>
 
-// Implementations for Crayon declared in crayon.hpp
 Crayon::Crayon() : color("") {}
 
 Crayon::Crayon(const std::string &c) : color(c) {}
 
-std::string Crayon::getColor() const { 
-    return color; 
+std::string Crayon::getColor() const
+{
+    return color;
 }
 
-bool Crayon::operator==(const Crayon &other) const { 
-    return color == other.color; 
+bool Crayon::operator==(const Crayon &other) const
+{
+    return color == other.color;
 }
 
-bool Crayon::operator<(const Crayon &other) const { 
-
-    for (int i = 0; i < color.length() && i < other.color.length(); ++i) {
-        if (tolower(color[i]) < tolower(other.color[i])) {
+bool Crayon::operator<(const Crayon &other) const
+{
+    for (size_t i = 0; i < color.length() && i < other.color.length(); ++i)
+    {
+        if (tolower(color[i]) < tolower(other.color[i]))
             return true;
-        }else if (color[i] == other.color[i]) {
-            continue;
-        }else{
-            break;
-        }
+        else if (tolower(color[i]) > tolower(other.color[i]))
+            return false;
     }
-
-    return false;
+    return color.length() < other.color.length();
 }
 
-bool Crayon::operator>(const Crayon &other) const { 
-    for (int i = 0; i < color.length() && i < other.color.length(); ++i) {
-        if (tolower(color[i]) > tolower(other.color[i])) {
+bool Crayon::operator>(const Crayon &other) const
+{
+    for (size_t i = 0; i < color.length() && i < other.color.length(); ++i)
+    {
+        if (tolower(color[i]) > tolower(other.color[i]))
             return true;
-        }else if (color[i] == other.color[i]) {
-            continue;
-        }else{ //color[i] < other.color[i]
-            break;
-        }
+        else if (tolower(color[i]) < tolower(other.color[i]))
+            return false;
     }
-
-    return false;
+    return color.length() > other.color.length();
 }
