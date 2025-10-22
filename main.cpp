@@ -102,6 +102,13 @@ void runTest()
     totalopCount_list2.moves += list2.getOperationCount().moves;
     totalopCount_list3.comparisons += list3.getOperationCount().comparisons;
     totalopCount_list3.moves += list3.getOperationCount().moves;
+
+    list1.printItems();
+    cout << "\n\n";
+    list2.printItems();
+    cout << "\n\n";
+    list3.printItems();
+    cout << "\n\n";
 }
 
 int main()

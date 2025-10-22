@@ -1,3 +1,4 @@
+
 #ifndef Template_HPP
 #define Template_HPP
 
@@ -6,6 +7,7 @@
 #define MAX_ITEMS 20
 
 #include <string>
+#include <iostream>
 #include "ErrorT.hpp"
 
 struct OperationCount
@@ -112,6 +114,17 @@ public:
     OperationCount getOperationCount()
     {
         return opCount;
+    }
+
+    void printItems()
+    {
+        for (int i = 0; i < MAX_ITEMS; i++) // <- you missed the '<'
+        {
+            if (items[i] != nullptr)
+                std::cout << "Item " << i << ": " << *items[i] << std::endl;
+            else
+                std::cout << "Item " << i << ": [empty]" << std::endl;
+        }
     }
 };
 
