@@ -1,6 +1,8 @@
 #ifndef ERRORT_HPP
 #define ERRORT_HPP
 
+#pragma once
+
 #include <string>
 #include <exception>
 
