@@ -1,7 +1,7 @@
 #include "template.hpp"
 
 template <typename T>
-class OrderedListBlankSpace : public orderedList<T>
+class OrderedListBlankSpace : public OrderedList<T>
 {
 public:
     void addItem(T &newItem) override;
