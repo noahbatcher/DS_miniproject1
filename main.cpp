@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+
 #include "template.hpp"
 #include "task2.hpp"
 #include "task3.hpp"
@@ -102,12 +103,14 @@ void runTest()
 int main()
 {
     std::srand(std::time(nullptr));
+    cout << "\nRunning testing...\n";
 
     for (int i = 0; i < 100; i++)
     {
         runTest();
     }
 
+    cout << "\nTesting complete.\n\n";
     cout << "List 1 (from front) - Total Comparisons: " << totalopCount_list1.comparisons << ", Total Moves: " << totalopCount_list1.moves << "\n";
     cout << "List 2 (from end) - Total Comparisons: " << totalopCount_list2.comparisons << ", Total Moves: " << totalopCount_list2.moves << "\n";
     cout << "List 3 (blank space insert) - Total Comparisons: " << totalopCount_list3.comparisons << ", Total Moves: " << totalopCount_list3.moves << "\n";
