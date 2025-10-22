@@ -1,9 +1,9 @@
 #include "template.hpp"
 
 template <typename T>
-class OrderedListFromEnd : public OrderedList<T>
+class OrderedListBlankSpace : public orderedList<T>
 {
 public:
     void addItem(T &newItem) override;
-    using OrderedList<T>::removeItem;
+    bool removeItem(T &oldItem) override;
 };

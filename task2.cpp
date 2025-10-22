@@ -3,36 +3,34 @@
 #include "task2.hpp"
 
 template <typename T>
-class OrderedListFromEnd : public OrderedList<T>
+void OrderedListFromEnd<T>::addItem(T &newItem)
 {
-public:
-    void addItem(T &newItem)
+    if (this->isFull())
     {
-        if (this->isFull())
-        {
-            throw ErrorT("List full. Cannot add item.");
-        }
-
-        if (this->size == 0)
-        {
-            this->items[0] = new T(newItem);
-            ++this->size;
-            return;
-        }
-
-        int pos = this->size - 1;
-        while (pos >= 0 && *this->items[pos] > newItem)
-        {
-            --pos;
-        }
-
-        // Shift items to make room
-        for (int j = this->size; j > pos + 1; --j)
-        {
-            this->items[j] = this->items[j - 1];
-        }
-
-        this->items[pos + 1] = new T(newItem);
-        ++this->size;
+        throw ErrorT("List full. Cannot add item.");
     }
-};
+
+    if (this->size == 0)
+    { // first item
+        this->items[0] = new T(newItem);
+        ++this->size;
+        return;
+    }
+
+    for (int i = this->size - 1; i >= 0; --i)
+    {
+        if (!(*this->items[i] > newItem)) // no nullptr needed because the size is controlled
+        {
+            opCount.comparisons++;
+            for (int j = this->size; j > i + 1; --j)
+            {
+                this->items[j] = this->items[j - 1];
+                opCount.moves++;
+            }
+            break;
+        }
+    }
+
+    this->items[i + 1] = new T(newItem);
+    ++this->size;
+}

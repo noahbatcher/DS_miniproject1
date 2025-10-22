@@ -7,6 +7,8 @@ template <class T>
 
 OrderedList<T>::OrderedList() : size(0), items{}
 {
+    for (int i = 0; i < MAX_ITEMS; ++i)
+        items[i] = nullptr;
 }
 
 template <class T>
@@ -30,22 +32,25 @@ void OrderedList<T>::addItem(T &newItem)
         return;
     }
 
-    for (int i = 0; i < size; ++i)
+    int i;
+    for (i = 0; i < size; ++i)
     {
         if (newItem < *items[i])
-        { // newItem is a lower number
+        {
 
             for (int j = size; j > i; j--)
             {
                 items[j] = items[j - 1];
+                opCount.moves++;
             }
-
-            items[i] = new T(newItem);
-
-            size++;
-            return;
+            opCount.comparisons++;
+            break;
         }
+        opCount.comparisons++;
     }
+
+    items[i] = new T(newItem);
+    size++;
 }
 
 template <class T>
@@ -60,11 +65,14 @@ bool OrderedList<T>::removeItem(T &oldItem)
             {
                 items[i] = items[i + 1];
                 ++i;
+                opCount.moves++;
             }
             --size;
             return true;
         }
+        opCount.comparisons++;
     }
+    opCount.comparisons++;
     throw ErrorT("Item not found in the items.");
     return false;
 }
@@ -76,6 +84,7 @@ void OrderedList<T>::makeEmpty()
     {
         delete items[i];
         items[i] = nullptr;
+        opCount.comparisons++;
     }
     size = 0;
 }
