@@ -57,13 +57,15 @@ void runTest()
     int moves = 0;
 
     // Insert into all 3 lists
-    for (int i = 0; i < removesLeft + addsLeft; ++i)
+    while (addsLeft > 0 || removesLeft > 0)
     {
         int action = randomAction(removesLeft, addsLeft);
+        cout << "action: " << (action == REMOVE_ITEM ? "Remove Item" : "Add Item") << "\n";
         if (action == REMOVE_ITEM)
         {
             int index = std::rand() % randomNumbers.size();
             int val = randomNumbers[index];
+            cout << "Removing " << val << " from all lists.\n";
             try
             {
                 list1.removeItem(val);
@@ -78,6 +80,7 @@ void runTest()
         }
         else
         {
+            cout << "Adding " << randomNumbers[addsLeft - 1] << " to all lists.\n";
             try
             {
                 list1.addItem(randomNumbers[addsLeft - 1]);
@@ -86,12 +89,13 @@ void runTest()
             }
             catch (ErrorT &e)
             {
-                std::cerr << "Error: " << e.ErrorDesc() << "\n";
+                std::cerr << "Error adding: " << e.ErrorDesc() << "\n";
             }
             --addsLeft;
         }
     }
     // adding totals
+    cout << "-------------------------------------------------------------------------------Test iteration complete----------------------------------------------------------------.\n";
     totalopCount_list1.comparisons += list1.getOperationCount().comparisons;
     totalopCount_list1.moves += list1.getOperationCount().moves;
     totalopCount_list2.comparisons += list2.getOperationCount().comparisons;

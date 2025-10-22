@@ -48,6 +48,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "xstring": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "iostream": "cpp"
     }
 }

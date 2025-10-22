@@ -9,6 +9,95 @@
 template <typename T>
 class OrderedListBlankSpace : public OrderedList<T>
 {
+private:
+    void moveItemsRight(int startIndex, int endIndex)
+    {
+        if (startIndex >= endIndex || startIndex < 0 || endIndex > MAX_ITEMS)
+            return;
+        for (int i = endIndex; i > startIndex; --i)
+        {
+            if (this->items[i - 1] != nullptr)
+            {
+                this->items[i] = this->items[i - 1];
+                this->items[i - 1] = nullptr;
+                this->opCount.moves++;
+            }
+            this->opCount.comparisons++;
+        }
+    }
+
+    void moveItemsLeft(int startIndex, int endIndex)
+    {
+        if (startIndex >= endIndex || startIndex < 0 || endIndex >= MAX_ITEMS)
+            return;
+        for (int i = startIndex; i < endIndex; ++i)
+        {
+            if (this->items[i + 1] != nullptr)
+            {
+                this->items[i] = this->items[i + 1];
+                this->items[i + 1] = nullptr;
+                this->opCount.moves++;
+            }
+            this->opCount.comparisons++;
+        }
+    }
+
+    int findItemLeft(int startIndex)
+    {
+        for (int i = std::min(startIndex, MAX_ITEMS - 1); i >= 0; --i)
+        {
+            if (this->items[i] != nullptr)
+            {
+                this->opCount.comparisons++;
+                return i;
+            }
+            this->opCount.comparisons++;
+        }
+        return -1;
+    }
+
+    int findItemRight(int startIndex)
+    {
+        for (int i = std::max(0, startIndex); i < MAX_ITEMS; ++i)
+        {
+            if (this->items[i] != nullptr)
+            {
+                this->opCount.comparisons++;
+                return i;
+            }
+            this->opCount.comparisons++;
+        }
+        return -1;
+    }
+
+    int findLeftSpace(int startIndex)
+    {
+        for (int i = std::min(startIndex, MAX_ITEMS - 1); i >= 0; --i)
+        {
+            if (this->items[i] == nullptr)
+            {
+                this->opCount.comparisons++;
+                return i;
+            }
+            this->opCount.comparisons++;
+        }
+        return -1;
+    }
+
+    int findRightSpace(int startIndex)
+    {
+        for (int i = std::max(0, startIndex); i < MAX_ITEMS; ++i)
+        {
+            if (this->items[i] == nullptr)
+            {
+                this->opCount.comparisons++;
+                return i;
+            }
+            this->opCount.comparisons++;
+        }
+        return -1;
+    }
+
 public:
     void addItem(T &newItem) override
     {
@@ -23,50 +112,73 @@ public:
         }
 
         int insertIndex = 0;
-        while (insertIndex < MAX_ITEMS && this->items[insertIndex] != nullptr && *this->items[insertIndex] < newItem)
+        while (insertIndex < MAX_ITEMS)
         {
+            if (this->items[insertIndex] == nullptr || *this->items[insertIndex] > newItem)
+            {
+                this->opCount.comparisons++;
+                break;
+            }
             this->opCount.comparisons++;
             ++insertIndex;
         }
 
-        int left = insertIndex - 1;
-        while (left >= 0 && this->items[left] == nullptr)
-            --left;
+        if (insertIndex >= MAX_ITEMS)
+            insertIndex = MAX_ITEMS - 1;
 
-        int right = insertIndex;
-        while (right < MAX_ITEMS && this->items[right] == nullptr)
-            ++right;
+        int rightMostIndex = findItemLeft(MAX_ITEMS - 1);
+        int insertPos;
 
-        int insertPos = -1;
-
-        if (left >= 0 && right < MAX_ITEMS && right - left > 1)
+        if (rightMostIndex == -1)
         {
-            insertPos = left + (right - left) / 2;
+            insertPos = MAX_ITEMS / 2;
         }
-        else if (left < 0)
+        else if (rightMostIndex == insertIndex)
         {
-            insertPos = 0;
-            for (int i = this->size; i > 0; --i)
+            if (*this->items[rightMostIndex] >= newItem)
             {
-                this->items[i] = this->items[i - 1];
-                this->opCount.moves++;
+                int spaceLeft = findLeftSpace(rightMostIndex - 1);
+                if (spaceLeft != -1)
+                    moveItemsLeft(spaceLeft, rightMostIndex);
+                insertPos = rightMostIndex;
             }
-        }
-        else if (right >= MAX_ITEMS)
-        {
-            insertPos = MAX_ITEMS - 1;
+            else
+            {
+                int leftSpaceInd = findLeftSpace(insertIndex - 1);
+                int leftItemInd = findItemLeft(insertIndex - 1);
+                if (leftSpaceInd > leftItemInd && leftSpaceInd != -1)
+                    insertPos = leftItemInd + (insertIndex - leftItemInd) / 2;
+                else if (leftSpaceInd != -1)
+                {
+                    moveItemsLeft(leftSpaceInd, insertIndex - 1);
+                    insertPos = insertIndex - 1;
+                }
+                else
+                    throw ErrorT("No space to insert item to the left.");
+            }
         }
         else
         {
-            insertPos = insertIndex;
-            for (int i = MAX_ITEMS - 1; i > insertPos; --i)
+            int rightItemInd = findItemRight(insertIndex);
+            if (rightItemInd == -1)
+                rightItemInd = MAX_ITEMS - 1;
+            int rightSpaceInd = findRightSpace(insertIndex);
+            if (rightSpaceInd == -1)
+                rightSpaceInd = MAX_ITEMS - 1;
+
+            if (rightSpaceInd < rightItemInd)
+                insertPos = insertIndex + (rightItemInd - insertIndex) / 2;
+            else if (rightSpaceInd != -1)
             {
-                if (this->items[i - 1] != nullptr)
-                {
-                    this->items[i] = this->items[i - 1];
-                    this->items[i - 1] = nullptr;
-                    this->opCount.moves++;
-                }
+                moveItemsRight(insertIndex + 1, rightMostIndex + 1);
+                insertPos = insertIndex;
+            }
+            else
+            {
+                int leftSpace = findLeftSpace(insertIndex - 1);
+                if (leftSpace != -1)
+                    moveItemsLeft(leftSpace, insertIndex);
+                insertPos = insertIndex;
             }
         }
 
@@ -87,7 +199,6 @@ public:
                 return true;
             }
         }
-
         throw ErrorT("Item not found in the items.");
         return false;
     }
