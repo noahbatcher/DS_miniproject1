@@ -4,7 +4,7 @@
 
 #pragma once
 
-#define MAX_ITEMS 20
+#define MAX_ITEMS 20 // 20 default
 
 #include <string>
 #include <iostream>

@@ -12,6 +12,8 @@ using namespace std;
 
 #define REMOVE_ITEM 3
 #define ADD_ITEM 4
+#define number_Rand_nums 30
+#define number_Removes 25
 
 OperationCount totalopCount_list1;
 OperationCount totalopCount_list2;
@@ -38,8 +40,8 @@ int randomAction(int removesLeft, int addsLeft)
 
 void runTest()
 {
-    int removesLeft = 25;
-    int addsLeft = 30;
+    int removesLeft = number_Removes;
+    int addsLeft = number_Rand_nums;
 
     OrderedList<int> list1;           // Task 1: normal insert from front
     OrderedListFromEnd<int> list2;    // Task 2: insert from end
@@ -48,7 +50,7 @@ void runTest()
     std::vector<int> randomNumbers;
 
     // Generate 30 random numbers between 1 and 100
-    for (int i = 0; i < 30; ++i)
+    for (int i = 0; i < number_Rand_nums; ++i)
     {
         randomNumbers.push_back(std::rand() % 100 + 1);
     }
